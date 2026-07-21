@@ -5,7 +5,7 @@ from joystick import read_joystick
 import pyttsx3
 
 engine = pyttsx3.init()
-engine.say("welcome to an unoficial copy built from the ground up of xenoblade chronicles, this game includes the JCP or joystick conection protocall would you like to enable it?")
+engine.say("welcome to an unoficial copy built from the ground up of xenoblade chronicles, this game includes the JCB or joystick conection bridge would you like to enable it?")
 engine.runAndWait()
 joystickread= str(input("for yes type y, for no type n:"))
 if joystickread == "y":
