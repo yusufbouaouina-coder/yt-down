@@ -9,6 +9,7 @@ inputfeild = ctk.CTkEntry(app, placeholder_text="please insert the video link or
 input.pack()
 def linkchekr():
     val = inputfeild.get()
+    if "https://" is val:
+        os.system("")        
 
 app.mainloop()
-os.system("")
