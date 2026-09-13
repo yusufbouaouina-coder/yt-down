@@ -1,4 +1,5 @@
 import customtkinter as ctk
+import yt_dlp_ejs as yde
 from ytcheker import ytcheck
 from vpn import pyvpn
 import yt_dlp
@@ -25,10 +26,15 @@ def resource_path(relative_path):
 def get_ydl_opts():
     """Build ydl_opts fresh each time, so it always reflects the current browser choice."""
     return {
+        "cookiesfrombrowser": ("chrome",),
         'format': 'bv*[ext=mp4]+ba[ext=m4a]/b[ext=mp4]',
         'outtmpl': os.path.join(output_folder, '%(title)s.%(ext)s'),
         'ffmpeg_location': resource_path('ffmpeg/bin'),
-    }
+        'js_runtimes': {
+            'deno': {
+                'path': resource_path('deno/deno.exe')
+            }
+        }}
 
 
 def vpn_stat(user, passw):
@@ -94,6 +100,7 @@ def download():
     with yt_dlp.YoutubeDL(get_ydl_opts()) as ydl:
         os.system(f'taskkill /im {browser}.exe /F')
         ydl.download([inputf.get()])
+        os.system(r"start %USERPROFILE%\AppData\Local\Google\Chrome\Application\chrome.exe")
 
 
 def ydltest():
