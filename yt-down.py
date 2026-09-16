@@ -1,16 +1,38 @@
 import customtkinter as ctk
 import yt_dlp_ejs as yde
 from ytcheker import ytcheck
-from vpn import pyvpn
 import yt_dlp
 import os
 import signal
 import sys
+import wgconfig
+
+directory = os.path.dirname(os.path.abspath(__file__))
+confgenpath = os.path.join(directory, "tools", "proton-conf", "proton-confgen.exe")
+wgconfpath = os.path.join(directory, "tools", "proton-conf", "protonvpn.conf")
+wpconfpath = os.path.join(directory, "tools", "wireproxy", "wireproxy.conf")
+wppath = os.path.join(directory, "tools", "wireproxy", "wireproxy.exe")
+
+def pubkey():
+    config_path = wgconfpath
+
+    # Load the configuration file
+    wc = wgconfig.WGConfig(config_path)
+    wc.read_file()
+
+    # Retrieve interface data which contains the PrivateKey
+    interface_data = wc.get_interface()
+    private_key = interface_data.get("PrivateKey")
+    public_key = wc.get_peers()
 
 # ---- state ----
 browser = 'chrome'   # sensible default so cookiesfrombrowser is never empty/invalid
 vpn_manip = None      # will hold the wireproxy process handle once VPN is started
 output_folder = os.path.expandvars("%USERPROFILE%\\Downloads")  # actually expand the env var
+
+
+
+
 
 
 def resource_path(relative_path):
@@ -37,9 +59,7 @@ def get_ydl_opts():
         }}
 
 
-def vpn_stat(user, passw):
-    global vpn_manip
-    pyvpn(user, passw)
+
 
 
 app = ctk.CTk()
@@ -68,11 +88,11 @@ def signinwind():
     passw_entry.pack(pady=10)
 
 
-    submit = ctk.CTkButton(
-        win, width=125, height=20, text='start vpn',
-        command=lambda: vpn_stat(username_entry.get(), passw_entry.get())
-    )
-    submit.pack(pady=10)
+#    submit = ctk.CTkButton(
+#        win, width=125, height=20, text='start vpn',
+#        command=lambda: vpn_stat(username_entry.get(), passw_entry.get())
+#    )
+#    submit.pack(pady=10)
 
 
 def browsersel():
@@ -84,9 +104,7 @@ def browsersel():
     chrome.pack(pady=10)
     brave = ctk.CTkButton(browsersele, text='select brave', command=lambda: browserset('brave'))
     brave.pack(pady=10)
-    chromium = ctk.CTkButton(browsersele, text='select chromium', command=lambda: browserset('chromium'))
-    chromium.pack(pady=10)
-    edge = ctk.CTkButton(browsersele, text='select edge', command=lambda: browserset('edge'))
+    edge = ctk.CTkButton(browsersele, text='select edge', command=lambda: browserset('msedge'))
     edge.pack(pady=10)
     firefox = ctk.CTkButton(browsersele, text='select firefox', command=lambda: browserset('firefox'))
     firefox.pack(pady=10)
